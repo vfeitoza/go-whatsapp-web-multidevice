@@ -1,11 +1,12 @@
 package validations
 
 import (
+	"strings"
+
 	"github.com/aldinokemal/go-whatsapp-web-multidevice/structs"
 	"github.com/aldinokemal/go-whatsapp-web-multidevice/utils"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
-	"strings"
 )
 
 func ValidateSendMessage(request structs.SendMessageRequest) {
@@ -18,9 +19,9 @@ func ValidateSendMessage(request structs.SendMessageRequest) {
 		panic(utils.ValidationError{
 			Message: err.Error(),
 		})
-	} else if !strings.HasPrefix(request.Phone, "62") {
+	} else if !strings.HasPrefix(request.Phone, "55") {
 		panic(utils.ValidationError{
-			Message: "phone number only work for indonesia country (start with 62)",
+			Message: "phone number only work for brazilian country (start with 55)",
 		})
 	}
 }
@@ -36,9 +37,9 @@ func ValidateSendImage(request structs.SendImageRequest) {
 		panic(utils.ValidationError{
 			Message: err.Error(),
 		})
-	} else if !strings.HasPrefix(request.Phone, "62") {
+	} else if !strings.HasPrefix(request.Phone, "55") {
 		panic(utils.ValidationError{
-			Message: "phone number only work for indonesia country (start with 62)",
+			Message: "phone number only work for brazilian country (start with 55)",
 		})
 	}
 
@@ -66,9 +67,9 @@ func ValidateSendFile(request structs.SendFileRequest) {
 		panic(utils.ValidationError{
 			Message: err.Error(),
 		})
-	} else if !strings.HasPrefix(request.Phone, "62") {
+	} else if !strings.HasPrefix(request.Phone, "55") {
 		panic(utils.ValidationError{
-			Message: "phone number only work for indonesia country (start with 62)",
+			Message: "phone number only work for brazilian country (start with 55)",
 		})
 	}
 

@@ -4,15 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
+	"time"
+
 	"github.com/aldinokemal/go-whatsapp-web-multidevice/config"
 	"github.com/aldinokemal/go-whatsapp-web-multidevice/structs"
 	"github.com/gofiber/fiber/v2"
 	fiberutils "github.com/gofiber/fiber/v2/utils"
 	"github.com/skip2/go-qrcode"
 	"go.mau.fi/whatsmeow"
-	"os"
-	"path/filepath"
-	"time"
 )
 
 type AppServiceImpl struct {
@@ -84,7 +85,7 @@ func (service AppServiceImpl) Login(c *fiber.Ctx) (response structs.LoginRespons
 
 func (service AppServiceImpl) Logout(c *fiber.Ctx) (err error) {
 	// delete history
-	files, err := filepath.Glob("./history-*")
+	files, err := filepath.Glob("./cache/json/history-*")
 	if err != nil {
 		panic(err)
 	}

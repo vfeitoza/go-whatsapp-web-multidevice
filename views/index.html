@@ -65,7 +65,7 @@
                 <div class="meta">App</div>
                 <div class="description">
                     Send any message to any
-                    <div class="ui blue horizontal label">indonesian</div>
+                    <div class="ui blue horizontal label">brazilian</div>
                     whatsapp number
                 </div>
             </div>
@@ -262,6 +262,7 @@
             <table class="ui celled table" id="user_groups_table">
                 <thead>
                 <tr>
+                    <th>Group ID</th>
                     <th>Group Name</th>
                     <th>Group Participants</th>
                     <th>Group Created At</th>
@@ -269,6 +270,7 @@
                 </thead>
                 <tbody v-if="data_groups != null">
                 <tr v-for="g in data_groups">
+                    <td data-label="ID">[[ g.JID.User ]]</td>
                     <td data-label="Name">[[ g.Name ]]</td>
                     <td data-label="Age">[[ g.Participants.length ]]</td>
                     <td data-label="Job">[[ g.GroupCreated ]]</td>

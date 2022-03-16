@@ -9,6 +9,19 @@ import (
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 )
 
+func ValidateSendMessageGroup(request structs.SendMessageRequest) {
+	err := validation.ValidateStruct(&request,
+		validation.Field(&request.Phone, validation.Required, validation.Length(10, 25)),
+		validation.Field(&request.Message, validation.Required, validation.Length(1, 50)),
+	)
+
+	if err != nil {
+		panic(utils.ValidationError{
+			Message: err.Error(),
+		})
+	}
+}
+
 func ValidateSendMessage(request structs.SendMessageRequest) {
 	err := validation.ValidateStruct(&request,
 		validation.Field(&request.Phone, validation.Required, is.E164, validation.Length(10, 15)),

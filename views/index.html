@@ -58,7 +58,7 @@
         </div>
     </div>
 
-    <div class="ui three cards">
+    <div class="ui four cards">
         <div class="green card" @click="sendMessageModal" style="cursor: pointer">
             <div class="content">
                 <div class="header">Send Message (Text)</div>
@@ -88,6 +88,17 @@
                 <div class="description">
                     Send any file up to
                     <div class="ui blue horizontal label">10MB</div>
+                </div>
+            </div>
+        </div>
+        <div class="green card" @click="sendMessageGroupModal" style="cursor: pointer">
+            <div class="content">
+                <div class="header">Send Message Group (Text)</div>
+                <div class="meta">App</div>
+                <div class="description">
+                    Send any message to any
+                    <div class="ui blue horizontal label">brazilian</div>
+                    whatsapp group
                 </div>
             </div>
         </div>
@@ -246,6 +257,34 @@
         </div>
         <div class="actions">
             <div class="ui positive right labeled icon button" @click="sendFileProcess">
+                Send
+                <i class="send icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <!--  Modal SendMessage  -->
+    <div class="ui small modal" id="modalSendMessageGroup">
+        <i class="close icon"></i>
+        <div class="header">
+            Send Message
+        </div>
+        <div class="content">
+            <form class="ui form">
+                <div class="field">
+                    <label>Group</label>
+                    <input v-model="message_phone" type="text" placeholder="6289..."
+                           aria-label="phone">
+                </div>
+                <div class="field">
+                    <label>Message</label>
+                    <input v-model="message_text" type="text" placeholder="Hello this is message text"
+                           aria-label="message">
+                </div>
+            </form>
+        </div>
+        <div class="actions">
+            <div class="ui positive right labeled icon button" @click="sendMessageGroupProcess">
                 Send
                 <i class="send icon"></i>
             </div>
@@ -606,6 +645,50 @@
         }
     }
 
+    const sendMessageGroup = {
+        data() {
+            return {
+                message_phone: '',
+                message_text: '',
+            }
+        },
+        methods: {
+            sendMessageGroupModal() {
+                $('#modalSendMessageGroup').modal('show');
+            },
+            async sendMessageGroupProcess() {
+                try {
+                    let response = await this.sendMessageGroupApi()
+                    showSuccessInfo(response)
+                } catch (err) {
+                    showErrorInfo(err)
+                }
+            },
+            sendMessageGroupApi() {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        let payload = new FormData();
+                        payload.append("phone", this.message_phone)
+                        payload.append("message", this.message_text)
+                        let response = await axios.post(`${this.app_host}/send/group/message`, payload)
+                        this.sendMessageReset();
+                        resolve(response.data.message)
+                    } catch (error) {
+                        if (error.response) {
+                            reject(error.response.data.message)
+                        } else {
+                            reject(error.message)
+                        }
+                    }
+                })
+            },
+            sendMessageReset() {
+                this.message_phone = '';
+                this.message_text = '';
+            },
+        }
+    }
+
     const userGroups = {
         data() {
             return {
@@ -786,7 +869,7 @@
                 app_name: 'Whatsapp API Multi Device App'
             }
         },
-        mixins: [login, logout, reconnect, sendMessage, sendImage, sendFile, userGroups, userPrivacy, userAvatar, userInfo]
+        mixins: [login, logout, reconnect, sendMessage, sendImage, sendFile, sendMessageGroup, userGroups, userPrivacy, userAvatar, userInfo]
     }).mount('#app')
 </script>
 </body>

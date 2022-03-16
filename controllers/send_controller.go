@@ -17,9 +17,29 @@ func NewSendController(service services.SendService) SendController {
 }
 
 func (controller *SendController) Route(app *fiber.App) {
+	app.Post("/send/group/message", controller.SendGroupText)
 	app.Post("/send/message", controller.SendText)
 	app.Post("/send/image", controller.SendImage)
 	app.Post("/send/file", controller.SendFile)
+}
+
+func (controller *SendController) SendGroupText(c *fiber.Ctx) error {
+	var request structs.SendMessageRequest
+	err := c.BodyParser(&request)
+	utils.PanicIfNeeded(err)
+
+	// add validation send message
+	validations.ValidateSendMessageGroup(request)
+
+	request.Phone = request.Phone + "@g.us"
+	response, err := controller.Service.SendText(c, request)
+	utils.PanicIfNeeded(err)
+
+	return c.JSON(utils.ResponseData{
+		Code:    200,
+		Message: response.Status,
+		Results: response,
+	})
 }
 
 func (controller *SendController) SendText(c *fiber.Ctx) error {

@@ -3,7 +3,6 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"mime"
 	"os"
 	"strings"
 	"sync/atomic"
@@ -154,24 +153,8 @@ func handler(rawEvt interface{}) {
 			metaParts = append(metaParts, "ephemeral")
 		}
 
-		log.Infof("Received message %s from %s (%s): %+v", evt.Info.ID, evt.Info.SourceString(), strings.Join(metaParts, ", "), evt.Message)
+		log.Infof("Received message %s from %s (%s)", evt.Info.ID, evt.Info.SourceString(), strings.Join(metaParts, ", "))
 
-		img := evt.Message.GetImageMessage()
-		if img != nil {
-			data, err := cli.Download(img)
-			if err != nil {
-				log.Errorf("Failed to download image: %v", err)
-				return
-			}
-			exts, _ := mime.ExtensionsByType(img.GetMimetype())
-			path := fmt.Sprintf("./cache/images/%s%s", evt.Info.ID, exts[0])
-			err = os.WriteFile(path, data, 0600)
-			if err != nil {
-				log.Errorf("Failed to save image: %v", err)
-				return
-			}
-			log.Infof("Saved image in message to %s", path)
-		}
 	case *events.Receipt:
 		if evt.Type == events.ReceiptTypeRead || evt.Type == events.ReceiptTypeReadSelf {
 			log.Infof("%v was read by %s at %s", evt.MessageIDs, evt.SourceString(), evt.Timestamp)
@@ -190,7 +173,7 @@ func handler(rawEvt interface{}) {
 		}
 	case *events.HistorySync:
 		id := atomic.AddInt32(&historySyncID, 1)
-		fileName := fmt.Sprintf("history-%d-%d.json", startupTime, id)
+		fileName := fmt.Sprintf("./cache/json/history-%d-%d.json", startupTime, id)
 		file, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0600)
 		if err != nil {
 			log.Errorf("Failed to open file to write history sync: %v", err)

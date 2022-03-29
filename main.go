@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/aldinokemal/go-whatsapp-web-multidevice/controllers"
 	"github.com/aldinokemal/go-whatsapp-web-multidevice/middleware"
 	"github.com/aldinokemal/go-whatsapp-web-multidevice/services"
@@ -48,7 +49,7 @@ func main() {
 		return ctx.Render("index", fiber.Map{"AppHost": "http://localhost:3000"})
 	})
 
-	err := app.Listen(":3000")
+	err := app.Listen("127.0.0.1:3000")
 	if err != nil {
 		fmt.Println("Failed to start: ", err.Error())
 	}
